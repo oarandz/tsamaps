@@ -30,12 +30,13 @@
   <style>
     :root {
       --purple: #4700A3;
-      --purple-mid: #6B28C8;
-      --purple-light: #f0e8ff;
+      --purple-mid: #7d78e8;
+      --purple-light: #e1dcff;
       --teal: #1FD1BD;
+      --teal-dark: #009392;
       --white: #ffffff;
       --off-white: #f8f6fc;
-      --text-mid: #5a4b6e;
+      --text-mid: #4700A3;
     }
 
     html, body { height: 100%; margin: 0; padding: 0; }
@@ -59,7 +60,7 @@
       align-items: stretch;
       width: 150px;
       background: var(--white);
-      border: 1.5px solid rgba(71,0,163,0.15);
+      border: 1.5px solid var(--purple-light);
       border-radius: 12px;
       box-shadow: 0 6px 28px rgba(71,0,163,0.18);
       font-family: 'BauerMediaSans', sans-serif;
@@ -109,7 +110,7 @@
       padding: 5px 22px 5px 9px;
       font-family: 'BauerMediaSans', sans-serif;
       font-size: 12px;
-      border: 1.5px solid rgba(71,0,163,0.25);
+      border: 1.5px solid var(--purple-light);
       border-radius: 7px;
       background: var(--off-white);
       color: var(--purple);
@@ -129,21 +130,21 @@
       border-radius: 7px;
       transition: background 0.15s;
     }
-    #showAllBtn  { background: var(--purple); color: #fff; }
+    #showAllBtn  { background: var(--purple); color: #fff; letter-spacing: 0.04em; }
     #showAllBtn:hover  { background: var(--purple-mid); }
-    #showNoneBtn { background: var(--purple-light); color: var(--purple); }
+    #showNoneBtn { background: var(--purple-light); color: var(--purple); letter-spacing: 0.04em; }
     #showNoneBtn:hover { background: #dcc8ff; }
 
     #controls button[data-group] {
       background: var(--white); color: var(--purple);
-      border: 1.5px solid rgba(71,0,163,0.2);
+      border: 1.5px solid var(--purple-light);
     }
     #controls button[data-group]:hover { background: var(--purple-light); border-color: var(--purple); }
     #controls button[data-group].inactive { opacity: 0.35; }
 
     @keyframes infoUpdate {
       0%   { box-shadow: 0 4px 20px rgba(71,0,163,0.14); }
-      40%  { box-shadow: 0 4px 24px rgba(71,0,163,0.45), 0 0 0 3px rgba(31,209,189,0.3); }
+      40%  { box-shadow: 0 4px 24px rgba(71,0,163,0.45), 0 0 0 3px rgba(160,150,255,0.5); }
       100% { box-shadow: 0 4px 20px rgba(71,0,163,0.14); }
     }
     .info.flash {
@@ -155,7 +156,7 @@
       font-size: 12px !important;
       border-radius: 10px !important;
       box-shadow: 0 4px 20px rgba(71,0,163,0.14) !important;
-      border: 1.5px solid rgba(71,0,163,0.1) !important;
+      border: 1.5px solid var(--purple-light) !important;
       color: var(--text-mid) !important;
       padding: 8px 12px !important;
     }
@@ -8283,7 +8284,7 @@
       // After all polygons have been created, assign colours so adjacent polygons use different colours.
       // Define a palette of distinct colours to cycle through. If the number of TSAs exceeds this palette,
       // colours will be reused, but the greedy algorithm helps minimise adjacent duplicates.
-      const palette = ['#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD','#1FD1BD'];
+      // Palette replaced by group-based tsaColourMap;
       // Build an adjacency map based on bounding box intersection
       const adjacency = [];
       for (let i = 0; i < tsaLayers.length; i++) {
@@ -8299,22 +8300,65 @@
           }
         }
       }
-      // Greedy colouring: assign each polygon the first available colour that none of its neighbours use
+      // Group-based colour assignment: each TSA gets a colour from its group's family
+      const tsaColourMap = {
+        "Berkshire & North Hampshire": "#4700A3",
+        "Birmingham & the West Midlands": "#4700A3",
+        "Bristol, Bath & the West": "#4700A3",
+        "Bucks, Beds & Herts": "#4700A3",
+        "The Black Country & Shropshire": "#4700A3",
+        "Cambridge": "#4700A3",
+        "Cornwall": "#4700A3",
+        "Coventry & Warwickshire": "#4700A3",
+        "Cumbria": "#4700A3",
+        "Devon": "#4700A3",
+        "Dorset": "#4700A3",
+        "East Midlands": "#4700A3",
+        "East Yorkshire & North Lincolnshire": "#4700A3",
+        "Essex": "#4700A3",
+        "Gloucestershire": "#4700A3",
+        "Herefordshire & Worcestershire": "#4700A3",
+        "Kent": "#4700A3",
+        "Lancashire": "#4700A3",
+        "Lincolnshire": "#4700A3",
+        "Liverpool & the North West": "#4700A3",
+        "London": "#4700A3",
+        "Manchester & the North West": "#4700A3",
+        "Norfolk": "#4700A3",
+        "Northamptonshire": "#4700A3",
+        "North East": "#4700A3",
+        "North Yorkshire": "#4700A3",
+        "Oxfordshire": "#4700A3",
+        "Peterborough, Stamford & Rutland": "#4700A3",
+        "Somerset": "#4700A3",
+        "The South Coast": "#4700A3",
+        "South Wales": "#4700A3",
+        "South Yorkshire & North Derbyshire": "#4700A3",
+        "Staffordshire & Cheshire": "#4700A3",
+        "Suffolk": "#4700A3",
+        "Surrey & East Hampshire": "#4700A3",
+        "Sussex": "#4700A3",
+        "Swindon": "#4700A3",
+        "Teesside": "#4700A3",
+        "West Yorkshire": "#4700A3",
+        "Wiltshire": "#4700A3",
+        "Ayrshire": "#4700A3",
+        "Dumfries and Galloway": "#4700A3",
+        "Edinburgh, the Lothians and Fife": "#4700A3",
+        "Glasgow and the West": "#4700A3",
+        "The North of Scotland": "#4700A3",
+        "The North East of Scotland": "#4700A3",
+        "The Scottish Borders and North Northumberland": "#4700A3",
+        "Tayside and Fife": "#4700A3",
+        "Northern Ireland": "#4700A3"
+};
+
       const assignedColours = new Array(tsaLayers.length);
       for (let i = 0; i < tsaLayers.length; i++) {
-        const used = new Set();
-        adjacency[i].forEach(j => {
-          if (assignedColours[j] !== undefined) {
-            used.add(assignedColours[j]);
-          }
-        });
-        let colour = palette.find(c => !used.has(c));
-        if (!colour) {
-          // fall back to the first colour if palette exhausted
-          colour = palette[0];
-        }
+        const colour = tsaColourMap[tsaLayers[i].tsaName] || '#1fd1bd';
         assignedColours[i] = colour;
-        tsaLayers[i].setStyle({ color: '#ffffff', fillColor: colour, opacity: 1 });
+        tsaLayers[i].setStyle({ color: '#ffffff', fillColor: colour, fillOpacity: 0.65, opacity: 1 });
+        tsaLayers[i]._origColor = '#4700A3';
       }
 
       // ── TSA LABELS — permanent tooltips, zoom-responsive ──
@@ -8362,13 +8406,88 @@
       map.on('zoomend', buildLabels);
 
 
+      // ── PERIMETER PULSE ANIMATION ──
+      const perimCanvas = document.createElement('canvas');
+      perimCanvas.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;z-index:1050;';
+      document.getElementById('map').appendChild(perimCanvas);
+
+      let perimAnim = null;
+      let perimPhase = 0;
+
+      function getScreenRing(poly) {
+        const lls = poly.getLatLngs();
+        const ring = Array.isArray(lls[0]) ? lls[0] : lls;
+        return ring.map(function(ll) {
+          return map.latLngToContainerPoint(ll);
+        });
+      }
+
+
+
+
+
+      function startPerimAnim(polys) {
+        stopPerimAnim();
+        const mapEl = document.getElementById('map');
+        perimCanvas.width  = mapEl.offsetWidth;
+        perimCanvas.height = mapEl.offsetHeight;
+        const ctx = perimCanvas.getContext('2d');
+        let t = 0;
+
+        function frame() {
+          ctx.clearRect(0, 0, perimCanvas.width, perimCanvas.height);
+
+          // Smooth pulse: oscillate border glow between dim and bright
+          const pulse = 0.5 + 0.5 * Math.sin(t * 0.1);
+
+          polys.forEach(function(poly) {
+            const ring = getScreenRing(poly);
+            ctx.beginPath();
+            ring.forEach(function(pt, i) {
+              i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+            });
+            ctx.closePath();
+
+            // Outer soft glow layer
+            ctx.shadowColor = 'rgba(90,240,255,' + (0.4 + pulse * 0.5).toFixed(2) + ')';
+            ctx.shadowBlur  = 6 + pulse * 24;
+            ctx.strokeStyle = 'rgba(90,240,255,' + (0.5 + pulse * 0.5).toFixed(2) + ')';
+            ctx.lineWidth   = 2 + pulse * 3.5;
+            ctx.stroke();
+
+            // Inner crisp white line on top
+            ctx.shadowBlur  = 0;
+            ctx.strokeStyle = 'rgba(255,255,255,' + (0.3 + pulse * 0.55).toFixed(2) + ')';
+            ctx.lineWidth   = 0.8;
+            ctx.stroke();
+          });
+
+          t++;
+          perimAnim = requestAnimationFrame(frame);
+        }
+
+        perimAnim = requestAnimationFrame(frame);
+      }
+
+      function stopPerimAnim() {
+        if (perimAnim) { cancelAnimationFrame(perimAnim); perimAnim = null; }
+        const ctx = perimCanvas.getContext('2d');
+        ctx.clearRect(0, 0, perimCanvas.width, perimCanvas.height);
+      }
+
+      // Refresh rings on zoom/pan (coords change)
+      map.on('move zoom', function() {
+        if (hoveredPolys.length > 0) startPerimAnim(hoveredPolys);
+      });
+
       // ── HOVER SYSTEM via map mousemove (no flicker) ──
       let hoveredPolys = [];
       let hoveredPoly = null;
 
       function clearHover() {
+        stopPerimAnim();
         hoveredPolys.forEach(function(p) {
-          p.setStyle({ fillColor: '#1FD1BD', fillOpacity: 0.22, color: '#ffffff', weight: 1.5, opacity: 1 });
+          p.setStyle({ fillColor: '#4700A3', fillOpacity: 0.65, color: '#ffffff', weight: 1.5, opacity: 1 });
           p.bringToBack();
         });
         hoveredPolys = [];
@@ -8442,10 +8561,11 @@
         hoveredPoly = under[0];
 
         toHighlight.forEach(function(p) {
-          p.setStyle({ fillColor: '#4700A3', fillOpacity: 0.55, color: '#ffffff', weight: 4, opacity: 1 });
+          p.setStyle({ fillColor: '#1fd1bd', fillOpacity: 0.7, color: '#ffffff', weight: 4, opacity: 1 });
           p.bringToFront();
           hoveredPolys.push(p);
         });
+        startPerimAnim(hoveredPolys);
 
         if (!searchResultsLocked) {
           const names = under.map(function(p) { return p.tsaName; }).join(' / ');
@@ -8506,13 +8626,7 @@
 
       // Highlight polygons when selected
       function highlight(polys) {
-        // reset styles
-        tsaLayers.forEach(poly => {
-          poly.setStyle({ fillOpacity: 0.25, weight: 2 });
-        });
-        polys.forEach(poly => {
-          poly.setStyle({ fillOpacity: 0.45, weight: 4 });
-        });
+        // no-op: hover system via mousemove handles all highlighting
       }
 
       // Display a persistent dialog listing TSAs covering a clicked or searched location.
