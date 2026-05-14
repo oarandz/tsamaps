@@ -8040,6 +8040,7 @@
       };
       info.addTo(map);
       let searchResultsLocked = false;
+      let outlineOnlyMode = false;
 
 
       // -----------------------------------------------------------------------------
@@ -8220,6 +8221,18 @@
         });
 
 
+        poly.on('click', function(e) {
+          L.DomEvent.stopPropagation(e);
+          if (outlineOnlyMode) {
+            setOutlineOnly(false);
+          } else {
+            clearHover();
+            stopPerimAnim();
+            setOutlineOnly(true);
+            const found = findAllTSAs(e.latlng);
+            showSearchDialog(found, 'this location');
+          }
+        });
         tsaLayers.push(poly);
       });
       // Add all groups to the map initially so all TSAs are visible
@@ -8541,6 +8554,7 @@
           return p.getBounds().contains(e.latlng) && ptInPoly(e.latlng, p);
         });
 
+        if (outlineOnlyMode) return;
         if (under.length === 0) {
           if (hoveredPolys.length > 0) {
             clearHover();
@@ -8625,8 +8639,20 @@
       }
 
       // Highlight polygons when selected
+      function setOutlineOnly(on) {
+        outlineOnlyMode = on;
+        tsaLayers.forEach(function(poly) {
+          if (on) {
+            poly.setStyle({ fillOpacity: 0, color: '#4700A3', weight: 3, opacity: 1 });
+          } else {
+            poly.setStyle({ fillColor: '#4700A3', fillOpacity: 0.65, color: '#ffffff', weight: 1.5, opacity: 1 });
+          }
+        });
+        if (!on) stopPerimAnim();
+      }
+
       function highlight(polys) {
-        // no-op: hover system via mousemove handles all highlighting
+        // no-op: hover system handles highlighting
       }
 
       // Display a persistent dialog listing TSAs covering a clicked or searched location.
@@ -8645,12 +8671,10 @@
 
       // Map click handler
       map.on('click', function(e) {
-        searchResultsLocked = false;
-        const found = findAllTSAs(e.latlng);
-        // Highlight any polygons covering the click point
-        highlight(found);
-        // Show a dialog listing TSAs covering this location or a message if none
-        showSearchDialog(found, 'this location');
+        // Fires when clicking empty map (not on a polygon)
+        if (outlineOnlyMode) {
+          setOutlineOnly(false);
+        }
       });
 
       // Add search control
